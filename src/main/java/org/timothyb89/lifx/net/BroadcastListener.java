@@ -91,8 +91,10 @@ public class BroadcastListener implements EventBusProvider {
 		}
 		
 		channel = DatagramChannel.open();
-		channel.socket().bind(new InetSocketAddress(BROADCAST_PORT));
-		channel.socket().setBroadcast(true);
+		DatagramSocket socket = channel.socket();
+		socket.setReuseAddress(true);
+		socket.bind(new InetSocketAddress(BROADCAST_PORT));
+		socket.setBroadcast(true);
 		channel.configureBlocking(true);
 		
 		listenerThread = new Thread(listener, "lifx-udp-listen");
